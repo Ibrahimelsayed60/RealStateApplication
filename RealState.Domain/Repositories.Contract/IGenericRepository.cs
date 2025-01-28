@@ -14,7 +14,7 @@ namespace RealState.Domain.Repositories.Contract
 
         Task<T?> GetByIdAsync(int id);
 
-        void Add(T entity);
+        int Add(T entity);
 
         void Update(T entity);
 

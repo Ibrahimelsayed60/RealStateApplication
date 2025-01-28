@@ -37,9 +37,11 @@ namespace RealState.Infrastructure
             throw new NotImplementedException();
         }
 
-        public void Add(T entity)
+        public int Add(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Add(entity);
+            var result = _dbContext.SaveChanges();
+            return result;
         }
 
         public void Delete(T entity)
