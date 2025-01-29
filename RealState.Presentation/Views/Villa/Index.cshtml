@@ -31,6 +31,8 @@
                         <th>@Html.DisplayNameFor(v => v.Price)</th>
                         <th>@Html.DisplayNameFor(v => v.SquareFeet)</th>
                         <th>@Html.DisplayNameFor(v => v.Occupancy)</th>
+                        <th>Update</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
 
@@ -42,6 +44,17 @@
                             <td>@item.Price</td>
                             <td>@item.SquareFeet</td>
                             <td>@item.Occupancy</td>
+                            <td>
+                                <a asp-action="Update" asp-controller="Villa" asp-route-id="@item.Id" class="btn btn-success">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+
+                            </td>
+                            <td>
+                                <a asp-action="Delete" asp-controller="Villa" asp-route-id="@item.Id" class="btn btn-danger">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </a>
+                            </td>
                         </tr>
                     }
                 </tbody>

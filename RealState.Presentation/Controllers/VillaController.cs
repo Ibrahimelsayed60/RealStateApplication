@@ -41,7 +41,7 @@ namespace RealState.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateVillaViewModel createVillaViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(createVillaViewModel);
             }
