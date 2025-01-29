@@ -27,6 +27,21 @@ namespace RealState.Infrastructure.Data
                     await _dbContext.SaveChangesAsync();
                 }
             }
+
+            if(_dbContext.VillaNumbers.Count() == 0)
+            {
+                var villaNumberData = File.ReadAllText("../RealState.Infrastructure/Data/DataSeed/villaNumbers.json");
+                var villaNumbers = JsonSerializer.Deserialize<List<VillaNumber>>(villaNumberData);
+
+                if(villaNumbers?.Count() > 0)
+                {
+                    foreach(var villaNumber in villaNumbers)
+                    {
+                        _dbContext.Set<VillaNumber>().Add(villaNumber);
+                    }
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
         }
 
     }

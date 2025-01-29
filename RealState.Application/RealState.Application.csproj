@@ -10,8 +10,4 @@
     <ProjectReference Include="..\RealState.Domain\RealState.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
