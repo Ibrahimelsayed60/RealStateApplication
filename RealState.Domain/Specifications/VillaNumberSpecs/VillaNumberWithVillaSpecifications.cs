@@ -15,7 +15,14 @@ namespace RealState.Domain.Specifications.VillaNumberSpecs
             AddIncludes();
         }
 
-        public VillaNumberWithVillaSpecifications(int id):base(v => v.Id == id) 
+        public VillaNumberWithVillaSpecifications(int villa_Number):base(v => v.Villa_Number == villa_Number)
+        {
+            AddIncludes();
+        }
+
+
+        public VillaNumberWithVillaSpecifications(VillaSpecParams spec)
+            :base(v => (!spec.VillaNumber.HasValue ||  v.Villa_Number == spec.VillaNumber))
         {
             AddIncludes();
         }

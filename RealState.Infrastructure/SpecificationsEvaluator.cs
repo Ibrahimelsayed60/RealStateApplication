@@ -17,7 +17,7 @@ namespace RealState.Infrastructure
 
             var query = inputQuery;
 
-            if(spec.Criteria is null)
+            if(spec.Criteria is not null)
                 query = query.Where(spec.Criteria);
 
             query = spec.Includes.Aggregate(query, (currentQuery, IncludeExpressions) => currentQuery.Include(IncludeExpressions));

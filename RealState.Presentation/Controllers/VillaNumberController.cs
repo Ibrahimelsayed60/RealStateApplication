@@ -1,12 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealState.Domain.Services.Contract;
 
 namespace RealState.Presentation.Controllers
 {
     public class VillaNumberController : Controller
     {
-        public IActionResult Index()
+        private readonly IVillaNumberService _villaService;
+
+        public VillaNumberController(IVillaNumberService villaService)
         {
-            return View();
+            _villaService = villaService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var villasData = await _villaService.GetAllVillaNumbersWithVillaData();
+
+            return View(villasData);
         }
     }
 }

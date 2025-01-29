@@ -13,17 +13,17 @@ namespace RealState.Domain.Services.Contract
 
         Task<IEnumerable<VillaNumber>> GetAllVillaNumbers();
 
-        Task<IEnumerable<VillaNumber>> GetAllVillaNumbersWithVillaData(VillaNumberWithVillaSpecifications spec);
+        Task<IEnumerable<VillaNumber>> GetAllVillaNumbersWithVillaData();
 
-        Task<VillaNumber> GetVillaNumberByVilla_number(int villa_number);
+        Task<VillaNumber?> GetVillaNumberByVilla_number(int villa_number);
 
         void CreateVillaNumber(VillaNumber villaNumber);
 
         void UpdateVillaNumber(VillaNumber villaNumber);
 
-        bool DeleteVillaNumber(int villa_number);
+        bool DeleteVillaNumber(VillaNumber villa_number);
 
-        bool CheckVillaNumberExists(int villa_number);
+        Task<bool> CheckVillaNumberExists(int villa_number);
 
     }
 }

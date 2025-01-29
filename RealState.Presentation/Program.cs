@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealState.Application.Common;
+using RealState.Application.Services;
 using RealState.Domain.Repositories.Contract;
 using RealState.Domain.Services.Contract;
 using RealState.Infrastructure;
@@ -26,6 +27,9 @@ namespace RealState.Presentation
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+
+            builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
+
 
             #endregion
 
