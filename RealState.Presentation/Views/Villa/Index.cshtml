@@ -27,6 +27,7 @@
             <table class="table table-bordered table-striped text-center">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>@Html.DisplayNameFor(v => v.Name)</th>
                         <th>@Html.DisplayNameFor(v => v.Price)</th>
                         <th>@Html.DisplayNameFor(v => v.SquareFeet)</th>
@@ -40,6 +41,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
+                            <td>@item.Id</td>
                             <td>@item.Name</td>
                             <td>@item.Price</td>
                             <td>@item.SquareFeet</td>
@@ -51,11 +53,33 @@
 
                             </td>
                             <td>
-                                <a asp-action="Delete" asp-controller="Villa" asp-route-id="@item.Id" class="btn btn-danger">
-                                    <i class="bi bi-trash-fill"></i> Delete
-                                </a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@string.Concat("deleteModal", item.Id.ToString())">
+                                    <i class="bi bi-trash-fill"></i>Delete
+                                </button>
                             </td>
+
                         </tr>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="@string.Concat("deleteModal",@item.Id.ToString())" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Employee</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure to delete this Employee?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form asp-action="Delete" asp-route-id="@item.Id.ToString()" method="post">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </tbody>
             </table>

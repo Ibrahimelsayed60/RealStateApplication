@@ -16,9 +16,9 @@ namespace RealState.Domain.Repositories.Contract
 
         int Add(T entity);
 
-        void Update(T entity);
+        int Update(T entity);
 
-        void Delete(T entity);
+        int Delete(T entity);
 
     }
 }

@@ -19,7 +19,7 @@ namespace RealState.Application.Common
         {
             var extension = Path.GetExtension(formFile.FileName);
 
-            if (allowedExtensions.Contains(extension))
+            if (!allowedExtensions.Contains(extension))
                 return null;
 
             if (formFile.Length > _allowedMaxSize)

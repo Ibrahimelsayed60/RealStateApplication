@@ -32,6 +32,7 @@ namespace RealState.Presentation.Controllers
             return View(villas);
         }
 
+        #region Create Action
         [HttpGet]
         public IActionResult Create()
         {
@@ -39,6 +40,7 @@ namespace RealState.Presentation.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateVillaViewModel createVillaViewModel)
         {
             if (!ModelState.IsValid)
@@ -81,6 +83,120 @@ namespace RealState.Presentation.Controllers
             return View(createVillaViewModel);
 
         }
+        #endregion
+
+
+        #region Update Action
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int? Id)
+        {
+            if (Id is null)
+                return BadRequest();
+
+            var villa = await _villaRepo.GetByIdAsync(Id.Value);
+
+            if(villa is null)
+            {
+                return NotFound();
+            }
+
+            EditVillaViewModel villEdit = new EditVillaViewModel()
+            {
+                Id = villa.Id,
+                Name = villa.Name,
+                Description = villa.Description,
+                Occupancy = villa.Occupancy,
+                Price = villa.Price,
+                SquareFeet = villa.SquareFeet,
+                imageUrl = villa.ImageUrl,
+            };
+
+            return View(villEdit);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update([FromRoute] int id,EditVillaViewModel villEdit)
+        {
+            if(!ModelState.IsValid)
+                return View(villEdit);
+
+            var message = string.Empty;
+
+            try
+            {
+
+                var villa = new Villa()
+                {
+                    Id = id,
+                    Name = villEdit.Name,
+                    Description = villEdit.Description,
+                    Price = villEdit.Price,
+                    Occupancy = villEdit.Occupancy,
+                    SquareFeet = villEdit.SquareFeet,
+                };
+                villa.ImageUrl = villEdit.Image is null ? villEdit.imageUrl : await _attachmentService.UploadAsync(villEdit.Image, "images");
+
+                var result = _villaRepo.Update(villa);
+
+                if (result > 0)
+                    return RedirectToAction(nameof(Index));
+                else
+                {
+                    message = "Villa did not Updated";
+                    ModelState.AddModelError(string.Empty, message);
+                    return View(villEdit);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "An Error occured during updating Employee";
+            }
+
+            ModelState.AddModelError(string.Empty, message);
+            return View(villEdit);
+
+        }
+
+
+        #endregion
+
+        #region Delete Action
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var message = string.Empty;
+
+            try
+            {
+                var villa = await _villaRepo.GetByIdAsync(id);
+                int result = 0;
+
+                if(villa is not null)
+                    result = _villaRepo.Delete(villa);
+
+                if (result > 0)
+                    return RedirectToAction(nameof(Index));
+                message = "an error occured during Deleting Villa";
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                // 2. Set Message
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "an error has occured during updating the Villa";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        #endregion
 
     }
 }

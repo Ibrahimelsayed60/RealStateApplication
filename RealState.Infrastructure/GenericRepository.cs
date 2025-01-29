@@ -27,14 +27,15 @@ namespace RealState.Infrastructure
             return await _dbContext.Set<T>().Where(X => !X.isDeleted).ToListAsync();
         }
 
-        public Task<T?> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public void Update(T entity)
+        public int Update(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Update(entity);
+            return _dbContext.SaveChanges();
         }
 
         public int Add(T entity)
@@ -44,9 +45,11 @@ namespace RealState.Infrastructure
             return result;
         }
 
-        public void Delete(T entity)
+        public int Delete(T entity)
         {
-            throw new NotImplementedException();
+            entity.isDeleted = true;
+            
+            return Update(entity);
         }
     }
 }

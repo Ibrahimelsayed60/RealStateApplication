@@ -1,9 +1,9 @@
-﻿@model CreateVillaViewModel
+﻿@model EditVillaViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Update";
 }
 
 
@@ -11,16 +11,16 @@
     <div class="card-header bg-success bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Create Villa</h2>
+                <h2 class="text-white py-2">Update Villa</h2>
             </div>
         </div>
     </div>
     <div class="card-body border p-4">
-        <form asp-action="Create" asp-controller="Villa" method="post" class="row col-12" enctype="multipart/form-data">
+        <form asp-action="Update" asp-controller="Villa" method="post" class="row col-12" enctype="multipart/form-data">
 
             <div asp-validation-summary="ModelOnly"></div>
             <div class="p-3">
-            
+
                 <div class="form-floating py-1 col-12">
                     <input asp-for="Name" class="form-control border shadow" />
                     <label asp-for="Name" class="ms-2"></label>
@@ -52,14 +52,19 @@
                 </div>
 
                 <div class="form-floating py-1 col-12">
-                    <input asp-for="ImageUrl" class="form-control border shadow" />
-                    <label asp-for="ImageUrl" class="ms-2"></label>
+                    <input asp-for="Image" class="form-control border shadow" />
+                    <label asp-for="Image" class="ms-2"></label>
+                </div>
+
+                <div class="form-floating py-1 col-12 d-none">
+                    <input asp-for="imageUrl" value="@Model.imageUrl" class="form-control border shadow" />
+                    <label asp-for="imageUrl" class="ms-2"></label>
                 </div>
 
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
                         <button type="submit" class="btn btn-success w-100">
-                            <i class="bi bi-check-circle"></i> Create
+                            <i class="bi bi-check-circle"></i> Update
                         </button>
                     </div>
                     <div class="col-6 col-md-3">
@@ -68,7 +73,7 @@
                         </a>
                     </div>
                 </div>
-                
+
             </div>
 
         </form>
