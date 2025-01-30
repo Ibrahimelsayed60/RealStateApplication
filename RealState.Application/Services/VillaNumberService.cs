@@ -37,9 +37,9 @@ namespace RealState.Application.Services
             return await _vNumRepo.GetItemWithSpecAsync(spec);
         }
 
-        public void CreateVillaNumber(VillaNumber villaNumber)
+        public int CreateVillaNumber(VillaNumber villaNumber)
         {
-            _vNumRepo.Add(villaNumber);
+            return _vNumRepo.Add(villaNumber);
         }
 
         public void UpdateVillaNumber(VillaNumber villaNumber)

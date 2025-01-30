@@ -17,7 +17,7 @@ namespace RealState.Domain.Services.Contract
 
         Task<VillaNumber?> GetVillaNumberByVilla_number(int villa_number);
 
-        void CreateVillaNumber(VillaNumber villaNumber);
+        int CreateVillaNumber(VillaNumber villaNumber);
 
         void UpdateVillaNumber(VillaNumber villaNumber);
 
