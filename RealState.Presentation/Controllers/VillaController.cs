@@ -177,7 +177,7 @@ namespace RealState.Presentation.Controllers
                 int result = 0;
 
                 if(villa is not null)
-                    result = _villaRepo.Delete(villa);
+                    result = _villaRepo.DeleteSoft(villa);
 
                 if (result > 0)
                     return RedirectToAction(nameof(Index));

@@ -31,9 +31,16 @@ namespace RealState.Application.Services
             return await _vNumRepo.GetAllWithSpecAsync(villaSpecs);
         }
 
+        public async Task<VillaNumber?> GetVillaNumberWithSpecById(int id)
+        {
+            VillaNumberWithVillaSpecifications specs = new VillaNumberWithVillaSpecifications(id);
+            return await _vNumRepo.GetItemWithSpecAsync(specs);
+        }
+
         public async Task<VillaNumber?> GetVillaNumberByVilla_number(int villa_number)
         {
-            var spec = new VillaNumberWithVillaSpecifications(villa_number);
+            var villaspec = new VillaSpecParams(villa_number);
+            var spec = new VillaNumberWithVillaSpecifications(villaspec);
             return await _vNumRepo.GetItemWithSpecAsync(spec);
         }
 
@@ -42,14 +49,14 @@ namespace RealState.Application.Services
             return _vNumRepo.Add(villaNumber);
         }
 
-        public void UpdateVillaNumber(VillaNumber villaNumber)
+        public int UpdateVillaNumber(VillaNumber villaNumber)
         {
-            _vNumRepo.Update(villaNumber);
+            return _vNumRepo.Update(villaNumber);
         }
 
         public bool DeleteVillaNumber(VillaNumber villaNumber)
         {
-            return _vNumRepo.Delete(villaNumber) > 0;
+            return _vNumRepo.DeleteHard(villaNumber) > 0;
         }
 
         public async Task<bool> CheckVillaNumberExists(int villa_number)

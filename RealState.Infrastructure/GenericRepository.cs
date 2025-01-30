@@ -63,11 +63,17 @@ namespace RealState.Infrastructure
             return result;
         }
 
-        public int Delete(T entity)
+        public int DeleteSoft(T entity)
         {
             entity.isDeleted = true;
             
             return Update(entity);
+        }
+
+        public int DeleteHard(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+            return _dbContext.SaveChanges();
         }
 
         

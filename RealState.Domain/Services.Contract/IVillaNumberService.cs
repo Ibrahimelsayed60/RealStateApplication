@@ -17,9 +17,11 @@ namespace RealState.Domain.Services.Contract
 
         Task<VillaNumber?> GetVillaNumberByVilla_number(int villa_number);
 
+        Task<VillaNumber?> GetVillaNumberWithSpecById(int id);
+
         int CreateVillaNumber(VillaNumber villaNumber);
 
-        void UpdateVillaNumber(VillaNumber villaNumber);
+        int UpdateVillaNumber(VillaNumber villaNumber);
 
         bool DeleteVillaNumber(VillaNumber villa_number);
 

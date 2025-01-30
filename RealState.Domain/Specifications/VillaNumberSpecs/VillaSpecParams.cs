@@ -10,5 +10,10 @@ namespace RealState.Domain.Specifications.VillaNumberSpecs
     {
 
         public int? VillaNumber { get; set; }
+
+        public VillaSpecParams(int villaNumber)
+        {
+            VillaNumber = villaNumber;
+        }
     }
 }
