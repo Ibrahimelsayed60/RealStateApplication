@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealState.Application.Common;
 using RealState.Application.Services;
+using RealState.Domain;
 using RealState.Domain.Repositories.Contract;
 using RealState.Domain.Services.Contract;
 using RealState.Infrastructure;
@@ -29,6 +30,11 @@ namespace RealState.Presentation
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 
             builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
+
+            builder.Services.AddScoped<IAmenityService, AmenityService>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 
             #endregion
