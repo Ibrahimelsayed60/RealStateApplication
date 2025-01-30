@@ -42,10 +42,8 @@ namespace RealState.Application.Services
             return _unitOfWork.Repository<Amenity>().Add(amenity);
         }
 
-        public async Task<bool> DeleteAmenity(int id)
+        public async Task<bool> DeleteAmenity(Amenity amenity)
         {
-            var amenity = await _unitOfWork.Repository<Amenity>().GetByIdAsync(id);
-
             return _unitOfWork.Repository<Amenity>().DeleteSoft(amenity) > 0;
         }
 

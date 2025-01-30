@@ -20,7 +20,7 @@ namespace RealState.Domain.Services.Contract
 
         int UpdateAmenity(Amenity amenity);
 
-        Task<bool> DeleteAmenity(int id);
+        Task<bool> DeleteAmenity(Amenity amenity);
 
     }
 }
