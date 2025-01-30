@@ -42,6 +42,21 @@ namespace RealState.Infrastructure.Data
                     await _dbContext.SaveChangesAsync();
                 }
             }
+
+            if(_dbContext.Amenities.Count() == 0)
+            {
+                var AmenityData = File.ReadAllText("../RealState.Infrastructure/Data/DataSeed/Amenity.json");
+                var amenities = JsonSerializer.Deserialize<List<Amenity>>(AmenityData);
+
+                if(amenities?.Count() > 0)
+                {
+                    foreach( var amenity in amenities)
+                    {
+                        _dbContext.Set<Amenity>().Add(amenity);
+                    }
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
         }
 
     }

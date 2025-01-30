@@ -1,0 +1,46 @@
+[
+    {
+        "VillaId" : 1,
+        "Name" : "Private Pool"
+    }, 
+    {
+        "VillaId" : 1,
+        "Name" : "Microwave"
+    }, 
+    {
+        "VillaId" : 1,
+        "Name" : "Private Balcony"
+    }, 
+    {
+        "VillaId" : 1,
+        "Name" : "1 king bed and 1 sofa bed"
+    },
+    {
+        "VillaId" : 2,
+        "Name" : "Private Plunge Pool"
+    }, 
+    {
+        "VillaId" : 2,
+        "Name" : "Microwave and Mini Refrigerator"
+    },
+    {
+        "VillaId" : 2,
+        "Name" : "Private Balcony"
+    }, 
+    {
+        "VillaId" : 2,
+        "Name" : "king bed or 2 double beds"
+    },
+    {
+        "VillaId" : 3,
+        "Name" : "Private Pool"
+    }, 
+    {
+        "VillaId" : 3,
+        "Name" : "Jacuzzi"
+    }, 
+    {
+        "VillaId" : 3,
+        "Name" : "Private Balcony"
+    }
+]
