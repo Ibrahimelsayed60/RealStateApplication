@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealState.Application.Common;
 using RealState.Application.Services;
 using RealState.Domain;
+using RealState.Domain.Entities.Identity;
 using RealState.Domain.Repositories.Contract;
 using RealState.Domain.Services.Contract;
 using RealState.Infrastructure;
 using RealState.Infrastructure.Data;
+using RealState.Infrastructure.Identity;
+using RealState.Presentation.Extensions;
 
 namespace RealState.Presentation
 {
@@ -24,6 +28,13 @@ namespace RealState.Presentation
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
+
+            builder.Services.AddIdentityServicesExtension();
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -47,6 +58,8 @@ namespace RealState.Presentation
 
             var _dbContext = services.GetRequiredService<ApplicationDbContext>();
 
+            var _IdentityDbContext = services.GetRequiredService<AppIdentityDbContext>();
+
             var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
             try
@@ -54,6 +67,12 @@ namespace RealState.Presentation
                 await _dbContext.Database.MigrateAsync();
 
                 await ApplicationDbContextSeed.SeedAsync(_dbContext);
+
+                await _IdentityDbContext.Database.MigrateAsync();
+
+                var _userManager = services.GetRequiredService<UserManager<AppUser>>();
+
+                await AppIdentityDbContextSeed.SeedUserAsync(_userManager);
             }
             catch (Exception ex)
             {
