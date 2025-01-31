@@ -68,16 +68,67 @@ namespace RealState.Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int? id)
         {
-            return View();
+            if(id is null)
+                return BadRequest();
+
+            var amenity = await _amenityService.GetAmenityWirhSpecById(id.Value);
+
+            if(amenity is null)
+                return NotFound();
+
+
+            var amenityVM = new AmenityViewModel()
+            {
+                Name = amenity.Name,
+                Description = amenity.Description,
+                VillaId = amenity.VillaId,
+                VillaName = amenity.Villa.Name,
+            };
+
+            return View(amenityVM);
         }
 
-        //[HttpPost]
-        //public IActionResult Update([FromRoute]int id)
-        //{
+        [HttpPost]
+        public IActionResult Update([FromRoute] int id, AmenityViewModel amenityVM)
+        {
+            if(!ModelState.IsValid)
+                return View(amenityVM);
 
-        //}
+            var message = string.Empty;
+
+            try
+            {
+
+                var amenity = new Amenity()
+                {
+                    Id = id,
+                    Name = amenityVM.Name,
+                    Description = amenityVM.Description,
+                    VillaId = amenityVM.VillaId.Value,
+                };
+
+                int result = _amenityService.UpdateAmenity(amenity);
+
+                if (result > 0)
+                    return RedirectToAction(nameof(Index));
+
+                message = "An error occured during Updating Amenity";
+                ModelState.AddModelError(string.Empty, message);
+                return View(amenityVM);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                message = _webHostEnvironment.IsDevelopment() ? ex.Message : "An error occured during updating Amenity";
+            }
+            ModelState.AddModelError(string.Empty, message);
+            return View(amenityVM);
+
+
+        }
 
 
 
