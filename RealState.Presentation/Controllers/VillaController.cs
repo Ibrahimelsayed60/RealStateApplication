@@ -3,23 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using RealState.Domain.Entities;
 using RealState.Domain.Repositories.Contract;
 using RealState.Domain.Services.Contract;
-using RealState.Presentation.ViewModels.Villa;
+using RealState.Presentation.ViewModels.VillaVM;
 
 namespace RealState.Presentation.Controllers
 {
     public class VillaController : Controller
     {
-        private readonly IGenericRepository<Villa> _villaRepo;
+        private readonly IVillaService _villaService;
         private readonly IAttachmentService _attachmentService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<VillaController> _logger;
 
-        public VillaController(IGenericRepository<Villa> villaRepo, 
+        public VillaController(IVillaService villaService,
             IAttachmentService attachmentService,
             IWebHostEnvironment webHostEnvironment,
             ILogger<VillaController> logger)
         {
-            _villaRepo = villaRepo;
+            _villaService = villaService;
             _attachmentService = attachmentService;
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace RealState.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var villas = await _villaRepo.GetAllAsync();
+            var villas = await _villaService.GetAllVillas();
 
             return View(villas);
         }
@@ -61,7 +61,7 @@ namespace RealState.Presentation.Controllers
                     ImageUrl = await _attachmentService.UploadAsync(createVillaViewModel.ImageUrl, "images")
                 };
 
-                int result = _villaRepo.Add(villa);
+                int result = _villaService.CreateVilla(villa);
 
                 if (result > 0)
                     return RedirectToAction(nameof(Index));
@@ -94,7 +94,7 @@ namespace RealState.Presentation.Controllers
             if (Id is null)
                 return BadRequest();
 
-            var villa = await _villaRepo.GetByIdAsync(Id.Value);
+            var villa = await _villaService.GetVillaById(Id.Value);
 
             if(villa is null)
             {
@@ -138,7 +138,7 @@ namespace RealState.Presentation.Controllers
                 };
                 villa.ImageUrl = villEdit.Image is null ? villEdit.imageUrl : await _attachmentService.UploadAsync(villEdit.Image, "images");
 
-                var result = _villaRepo.Update(villa);
+                var result = _villaService.UpdateVilla(villa);
 
                 if (result > 0)
                     return RedirectToAction(nameof(Index));
@@ -173,13 +173,13 @@ namespace RealState.Presentation.Controllers
 
             try
             {
-                var villa = await _villaRepo.GetByIdAsync(id);
-                int result = 0;
+                var villa = await _villaService.GetVillaById(id);
+                bool result = false;
 
                 if(villa is not null)
-                    result = _villaRepo.DeleteSoft(villa);
+                    result = _villaService.DeleteVilla(villa);
 
-                if (result > 0)
+                if (result )
                     return RedirectToAction(nameof(Index));
                 message = "an error occured during Deleting Villa";
 

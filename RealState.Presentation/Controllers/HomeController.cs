@@ -1,21 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
+using RealState.Domain;
+using RealState.Domain.Services.Contract;
 using RealState.Presentation.Models;
+using RealState.Presentation.ViewModels;
+using System;
 using System.Diagnostics;
 
 namespace RealState.Presentation.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IVillaService _villaService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IVillaService villaService)
         {
-            _logger = logger;
+            _villaService = villaService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            HomeViewModel homeVM = new HomeViewModel()
+            {
+                VillaList =await _villaService.GetAllVillas(),
+                NumberOfNights = 1,
+                CheckInDate = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            return View(homeVM);
         }
 
         public IActionResult Privacy()

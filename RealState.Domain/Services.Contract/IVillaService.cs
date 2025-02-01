@@ -10,7 +10,15 @@ namespace RealState.Domain.Services.Contract
     public interface IVillaService
     {
 
-        Task<int> CreateVillaAsync(Villa villa);
+        Task<IEnumerable<Villa>> GetAllVillas();
+
+        Task<Villa> GetVillaById(int id);
+
+        int CreateVilla(Villa villa);
+
+        int UpdateVilla(Villa villa);
+
+        bool DeleteVilla(Villa villa);
 
     }
 }

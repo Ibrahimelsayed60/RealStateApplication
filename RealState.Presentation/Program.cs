@@ -34,7 +34,7 @@ namespace RealState.Presentation
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
 
-            builder.Services.AddIdentityServicesExtension();
+            builder.Services.AddIdentityServicesExtension(builder.Configuration);
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
