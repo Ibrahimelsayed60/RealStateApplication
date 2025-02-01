@@ -21,7 +21,7 @@ namespace RealState.Presentation.Controllers
         {
             HomeViewModel homeVM = new HomeViewModel()
             {
-                VillaList =await _villaService.GetAllVillas(),
+                VillaList =await _villaService.GetAllVillaWithAmenitySpecs(),
                 NumberOfNights = 1,
                 CheckInDate = DateOnly.FromDateTime(DateTime.Now)
             };

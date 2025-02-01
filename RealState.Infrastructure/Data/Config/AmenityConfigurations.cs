@@ -17,7 +17,7 @@ namespace RealState.Infrastructure.Data.Config
 
             builder.Property(A => A.Description).HasMaxLength(300);
 
-            builder.HasOne(a => a.Villa).WithMany().HasForeignKey(a => a.VillaId);
+            builder.HasOne(a => a.Villa).WithMany(v => v.Amenities).HasForeignKey(a => a.VillaId);
         }
     }
 }

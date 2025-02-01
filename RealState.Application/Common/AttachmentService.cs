@@ -3,8 +3,10 @@ using RealState.Domain.Services.Contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RealState.Application.Common
 {
@@ -24,8 +26,8 @@ namespace RealState.Application.Common
 
             if (formFile.Length > _allowedMaxSize)
                 return null;
-
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\files" ,folderName);
+            
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\files", folderName);
 
             if(!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);

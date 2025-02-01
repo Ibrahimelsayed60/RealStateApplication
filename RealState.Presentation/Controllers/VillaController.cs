@@ -58,7 +58,7 @@ namespace RealState.Presentation.Controllers
                     Price = createVillaViewModel.Price,
                     SquareFeet = createVillaViewModel.SquareFeet,
                     Occupancy = createVillaViewModel.Occupancy,
-                    ImageUrl = await _attachmentService.UploadAsync(createVillaViewModel.ImageUrl, "images")
+                    ImageUrl = await _attachmentService.UploadAsync(createVillaViewModel.ImageUrl, @"VillaImage")
                 };
 
                 int result = _villaService.CreateVilla(villa);
@@ -136,7 +136,7 @@ namespace RealState.Presentation.Controllers
                     Occupancy = villEdit.Occupancy,
                     SquareFeet = villEdit.SquareFeet,
                 };
-                villa.ImageUrl = villEdit.Image is null ? villEdit.imageUrl : await _attachmentService.UploadAsync(villEdit.Image, "images");
+                villa.ImageUrl = villEdit.Image is null ? villEdit.imageUrl : await _attachmentService.UploadAsync(villEdit.Image, @"VillaImage");
 
                 var result = _villaService.UpdateVilla(villa);
 

@@ -12,6 +12,8 @@ namespace RealState.Domain.Services.Contract
 
         Task<IEnumerable<Villa>> GetAllVillas();
 
+        Task<IEnumerable<Villa>> GetAllVillaWithAmenitySpecs();
+
         Task<Villa> GetVillaById(int id);
 
         int CreateVilla(Villa villa);

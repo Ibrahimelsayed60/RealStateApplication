@@ -1,6 +1,8 @@
 ﻿using RealState.Domain;
 using RealState.Domain.Entities;
 using RealState.Domain.Services.Contract;
+using RealState.Domain.Specifications.VillaNumberSpecs;
+using RealState.Domain.Specifications.VillaSpecs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,12 @@ namespace RealState.Application.Services
             return await _unitOfWork.Repository<Villa>().GetAllAsync();
         }
 
+        public async Task<IEnumerable<Villa>> GetAllVillaWithAmenitySpecs()
+        {
+            var specs = new VillaWithAmenitySpecifications();
+
+            return await _unitOfWork.Repository<Villa>().GetAllWithSpecAsync(specs);
+        }
         public async Task<Villa> GetVillaById(int id)
         {
             return await _unitOfWork.Repository<Villa>().GetByIdAsync(id);
@@ -42,6 +50,7 @@ namespace RealState.Application.Services
         {
             return _unitOfWork.Repository<Villa>().DeleteSoft(villa) > 0;
         }
-  
+
+        
     }
 }

@@ -24,5 +24,7 @@ namespace RealState.Domain.Entities
 
         public DateTime? UpdatedDate { get;set; }
 
+        public IEnumerable<Amenity>? Amenities { get; set; }
+
     }
 }

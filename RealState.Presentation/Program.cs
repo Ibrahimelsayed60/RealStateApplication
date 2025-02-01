@@ -40,6 +40,8 @@ namespace RealState.Presentation
 
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 
+            builder.Services.AddScoped<IVillaService, VillaService>();
+
             builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
 
             builder.Services.AddScoped<IAmenityService, AmenityService>();

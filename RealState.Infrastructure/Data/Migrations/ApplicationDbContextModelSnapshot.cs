@@ -49,7 +49,7 @@ namespace RealState.Infrastructure.Data.Migrations
 
                     b.HasIndex("VillaId");
 
-                    b.ToTable("Amenities");
+                    b.ToTable("Amenities", (string)null);
                 });
 
             modelBuilder.Entity("RealState.Domain.Entities.Villa", b =>
@@ -95,7 +95,7 @@ namespace RealState.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Viilas");
+                    b.ToTable("Viilas", (string)null);
                 });
 
             modelBuilder.Entity("RealState.Domain.Entities.VillaNumber", b =>
@@ -123,7 +123,7 @@ namespace RealState.Infrastructure.Data.Migrations
 
                     b.HasIndex("VillaId");
 
-                    b.ToTable("VillaNumbers");
+                    b.ToTable("VillaNumbers", (string)null);
                 });
 
             modelBuilder.Entity("RealState.Domain.Entities.Amenity", b =>
