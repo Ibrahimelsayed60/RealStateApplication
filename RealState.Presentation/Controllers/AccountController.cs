@@ -10,12 +10,18 @@ namespace RealState.Presentation.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAuthService _authService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthService authService)
+        public AccountController(
+            UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
+            IAuthService authService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _authService = authService;
         }
 
