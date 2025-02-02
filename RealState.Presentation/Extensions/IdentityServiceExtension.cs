@@ -61,8 +61,11 @@ namespace RealState.Presentation.Extensions
                         // Suppress default 401 response
                         context.HandleResponse();
 
+                        string returnUrl = context.Request.Path + context.Request.QueryString;
+                        string loginUrl = $"/Account/Login?returnUrl={Uri.EscapeDataString(returnUrl)}";
+
                         // Redirect to login page
-                        context.Response.Redirect("/Account/Login");
+                        context.Response.Redirect(loginUrl);
                         return Task.CompletedTask;
                     }
                 };

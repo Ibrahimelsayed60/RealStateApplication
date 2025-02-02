@@ -27,9 +27,15 @@ namespace RealState.Presentation.Controllers
             _authService = authService;
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl = null)
         {
-            return View();
+            returnUrl ??= Url.Content("~/");
+
+            RegisterViewModel registerVM = new()
+            {
+                RedirectUrl = returnUrl
+            };
+            return View(registerVM);
         }
 
         public IActionResult Login(string returnUrl = null)
@@ -73,7 +79,14 @@ namespace RealState.Presentation.Controllers
                             Expires = DateTime.UtcNow.AddHours(1) // Expiration time
                         });
 
-                        return RedirectToAction("Index", "Home");
+                        if (string.IsNullOrEmpty(loginVM.RedirectUrl))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            return LocalRedirect(loginVM.RedirectUrl);
+                        }
                     }
                 }
                 else
@@ -118,7 +131,7 @@ namespace RealState.Presentation.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, SD.Role_Customer);
                     }
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Login", new {returnUrl = registerVM.RedirectUrl});
 
                 } 
             }
