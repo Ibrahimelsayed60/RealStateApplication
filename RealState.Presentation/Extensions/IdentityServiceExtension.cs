@@ -37,7 +37,22 @@ namespace RealState.Presentation.Extensions
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromDays(double.Parse(configuration["JWT:DurationInDays"]))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var token = context.Request.Cookies["AuthToken"]; // Read token from cookie
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+            services.AddAuthorization();
 
             return services;
         }

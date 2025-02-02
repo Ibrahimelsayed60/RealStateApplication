@@ -19,6 +19,8 @@ namespace RealState.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var token = Request.Cookies["AuthToken"];
+
             HomeViewModel homeVM = new HomeViewModel()
             {
                 VillaList =await _villaService.GetAllVillaWithAmenitySpecs(),

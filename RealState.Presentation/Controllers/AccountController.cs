@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using RealState.Domain.Entities.Identity;
 using RealState.Domain.Services.Contract;
+using RealState.Presentation.Helpers;
 using RealState.Presentation.ViewModels.Identity;
 
 namespace RealState.Presentation.Controllers
@@ -45,57 +46,98 @@ namespace RealState.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
-            if (ModelState.IsValid) {
-                var user = await _userManager.FindByEmailAsync(loginVM.Email);
+            if (!ModelState.IsValid)
+            {
+                return View(loginVM);
+            }
+            var user = await _userManager.FindByEmailAsync(loginVM.Email);
 
-                if (user is not null)
+            if (user is not null)
+            {
+                var Flag = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+
+                if (Flag)
                 {
+                    var Result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, loginVM.RememberMe, false);
 
-                    var flag = await _userManager.CheckPasswordAsync(user, loginVM.Password);
-
-                    if (flag)
+                    if (Result.Succeeded)
                     {
-                        var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, true, false);
 
-                        if(result.Succeeded)
+                        var token = await _authService.CreateTokenAsync(user, _userManager);
+
+                        // Store the token in a cookie (so it persists across requests)
+                        Response.Cookies.Append("AuthToken", token, new CookieOptions
                         {
-                            var token = await  _authService.CreateTokenAsync(user, _userManager);
+                            HttpOnly = true, // Secure from JavaScript access
+                            Secure = true,   // Requires HTTPS
+                            Expires = DateTime.UtcNow.AddHours(1) // Expiration time
+                        });
 
-                            Response.Cookies.Append("AuthToken",token, new CookieOptions()
-                            {
-                                HttpOnly = true,
-                                Secure = true,
-                                Expires = DateTime.UtcNow.AddHours(1)
-                            });
-
-                        }
-                        
-
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Incorrect Password");
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Email does not exist");
+                    ModelState.AddModelError(string.Empty, "Incorrect password");
                 }
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Email is not Exists");
             }
             return View(loginVM);
 
         }
 
-        //[HttpPost]
-        //public IActionResult Register(RegisterViewModel registerVM)
-        //{
-
-            
-
-        //}
-        public IActionResult SignOut()
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel registerVM)
         {
-            return View();
+            
+            if (ModelState.IsValid && !CheckEmailExists(registerVM.Email).Result.Value)
+            {
+                AppUser user = new()
+                {
+                    Name = registerVM.Name,
+                    Email = registerVM.Email,
+                    PhoneNumber = registerVM.Phonenumber,
+                    NormalizedEmail = registerVM.Email.ToUpper(),
+                    EmailConfirmed = true,
+                    UserName = registerVM.Email.Split("@")[0],
+                    CreatedAt = DateTime.Now
+                };
+
+                var result = await _userManager.CreateAsync(user, registerVM.Password);
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(registerVM.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, registerVM.Role);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.Role_Customer);
+                    }
+                    return RedirectToAction("Login");
+
+                } 
+            }
+
+            return View(registerVM);
+
+        }
+
+        [HttpGet("emailexists")]
+        public async Task<ActionResult<bool>> CheckEmailExists(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) is not null;
+        }
+
+        public async Task<IActionResult> SignOut()
+        {
+            Response.Cookies.Delete("AuthToken");
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
         }
 
 
