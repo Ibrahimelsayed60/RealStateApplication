@@ -140,6 +140,10 @@ namespace RealState.Presentation.Controllers
             return RedirectToAction(nameof(Login));
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
     }
 }
