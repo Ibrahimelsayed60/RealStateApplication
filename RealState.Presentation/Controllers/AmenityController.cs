@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using RealState.Application.Services;
 using RealState.Domain.Entities;
 using RealState.Domain.Services.Contract;
+using RealState.Presentation.Helpers;
 using RealState.Presentation.ViewModels.Amenity;
 
 namespace RealState.Presentation.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class AmenityController : Controller
     {
         private readonly IAmenityService _amenityService;

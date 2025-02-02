@@ -48,8 +48,26 @@ namespace RealState.Presentation.Extensions
                             context.Token = token;
                         }
                         return Task.CompletedTask;
+                    },
+
+                    OnForbidden = context =>
+                    {
+                        context.Response.Redirect("/Account/AccessDenied");
+                        return Task.CompletedTask;
+                    },
+
+                    OnChallenge = context =>
+                    {
+                        // Suppress default 401 response
+                        context.HandleResponse();
+
+                        // Redirect to login page
+                        context.Response.Redirect("/Account/Login");
+                        return Task.CompletedTask;
                     }
                 };
+
+
             });
 
             services.AddAuthorization();
