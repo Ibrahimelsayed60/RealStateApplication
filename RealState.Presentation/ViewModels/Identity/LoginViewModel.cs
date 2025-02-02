@@ -13,5 +13,7 @@ namespace RealState.Presentation.ViewModels.Identity
 
         public bool RememberMe { get; set; }
 
+        public string? RedirectUrl { get; set; }
+
     }
 }

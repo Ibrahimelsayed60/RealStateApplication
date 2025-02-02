@@ -21,6 +21,8 @@ namespace RealState.Presentation.ViewModels.Identity
         [Display(Name = "Phone Number")]
         public string? Phonenumber { get; set; }
 
+        public string? RedirectUrl { get; set; }
+
         public string? Role { get; set; }
     }
 }
