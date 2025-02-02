@@ -6,6 +6,8 @@ using RealState.Domain.Services.Contract;
 using RealState.Infrastructure.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using RealState.Infrastructure.Data;
 
 namespace RealState.Presentation.Extensions
 {
@@ -18,12 +20,20 @@ namespace RealState.Presentation.Extensions
 
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
+            //services.ConfigureApplicationCookie(option =>
+            //{
+            //    option.AccessDeniedPath = "/Account/AccessDenied";
+            //    option.LoginPath = "/Account/Login";
+            //});
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateAudience = true,
@@ -36,7 +46,15 @@ namespace RealState.Presentation.Extensions
                     ClockSkew = TimeSpan.FromDays(double.Parse(configuration["JWT:DurationInDays"]))
                 };
             });
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddCookie(option => 
+            {
+                option.LoginPath = "/Account/Login";
+                option.AccessDeniedPath = "/Account/AccessDenied";
+            });
 
+
+            services.AddAuthorization();
             return services;
         }
     }
