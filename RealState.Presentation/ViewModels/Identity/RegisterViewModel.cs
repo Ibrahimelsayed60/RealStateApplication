@@ -18,13 +18,8 @@ namespace RealState.Presentation.ViewModels.Identity
         [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage ="Name is Required")]
-        public string? Name { get; set; }
-
         [Display(Name = "Phone Number")]
         public string? Phonenumber { get; set; }
-
-        public string? RedirectUrl { get; set; }
 
         public string? Role { get; set; }
     }

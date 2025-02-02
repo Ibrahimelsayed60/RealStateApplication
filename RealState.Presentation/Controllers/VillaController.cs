@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using RealState.Domain.Entities;
 using RealState.Domain.Repositories.Contract;
@@ -8,7 +7,6 @@ using RealState.Presentation.ViewModels.VillaVM;
 
 namespace RealState.Presentation.Controllers
 {
-    [Authorize]
     public class VillaController : Controller
     {
         private readonly IVillaService _villaService;

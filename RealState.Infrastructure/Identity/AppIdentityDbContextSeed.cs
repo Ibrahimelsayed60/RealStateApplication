@@ -11,7 +11,7 @@ namespace RealState.Infrastructure.Identity
     public static class AppIdentityDbContextSeed
     {
 
-        public static async Task SeedUserAsync(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUserAsync(UserManager<AppUser> userManager)
         {
             if(userManager.Users.Count() == 0)
             {
@@ -26,14 +26,6 @@ namespace RealState.Infrastructure.Identity
 
                 await userManager.CreateAsync(user, "Pa$$w0rd");
             }
-
-            if(!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult()) 
-            {
-                roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
-                roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
-            }
-
-
         }
 
     }

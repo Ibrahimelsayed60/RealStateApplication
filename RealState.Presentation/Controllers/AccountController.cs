@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
-using NuGet.Common;
-using RealState.Application.Common;
 using RealState.Domain.Entities.Identity;
 using RealState.Domain.Services.Contract;
 using RealState.Presentation.ViewModels.Identity;
@@ -28,85 +25,14 @@ namespace RealState.Presentation.Controllers
             _authService = authService;
         }
 
-        public IActionResult Register(string returnUrl = null)
+        public IActionResult Register()
         {
-            returnUrl ??= Url.Content("~/");
-
-            RegisterViewModel registerVM = new()
-            {
-                RedirectUrl = returnUrl
-            };
-
-            return View(registerVM);
+            return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel registerVM)
+        public IActionResult Login()
         {
-            if(!CheckEmailExists(registerVM.Email).Result.Value && ModelState.IsValid)
-            {
-                AppUser user = new AppUser()
-                {
-                    Name = registerVM.Name,
-                    Email = registerVM.Email,
-                    UserName = registerVM.Email.Split("@")[0],
-                    PhoneNumber = registerVM.Phonenumber,
-                    NormalizedEmail = registerVM.Email.ToUpper(),
-                    EmailConfirmed = true,
-                    CreatedAt = DateTime.UtcNow
-                };
-
-                var result = await _userManager.CreateAsync(user, registerVM.Password);
-
-                if(result.Succeeded)
-                {
-                    if(!string.IsNullOrEmpty(registerVM.Role))
-                    {
-                        await _userManager.AddToRoleAsync(user, registerVM.Role);
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, SD.Role_Customer);
-                    }
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    var token = await _authService.CreateTokenAsync(user, _userManager);
-                    Response.Cookies.Append("AuthToken", token, new CookieOptions()
-                    {
-                        HttpOnly = true,
-                        Secure = true,
-                        Expires = DateTime.UtcNow.AddHours(10)
-                    });
-
-                    if (string.IsNullOrEmpty(registerVM.RedirectUrl))
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        return LocalRedirect(registerVM.RedirectUrl);
-                    }
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
-
-            }
-            ModelState.AddModelError(string.Empty, "This Email is already Exist");
-            return View(registerVM);
-        }
-
-        public IActionResult Login(string returnUrl = null)
-        {
-            returnUrl ??= Url.Content("~/");
-
-            LoginViewModel loginVM = new()
-            {
-                RedirectUrl = returnUrl
-            };
-
-            return View(loginVM);
+            return View();
         }
 
         [HttpPost]
@@ -132,32 +58,9 @@ namespace RealState.Presentation.Controllers
                             {
                                 HttpOnly = true,
                                 Secure = true,
-                                Expires = DateTime.UtcNow.AddHours(10)
+                                Expires = DateTime.UtcNow.AddHours(1)
                             });
 
-
-                            if (string.IsNullOrEmpty(loginVM.RedirectUrl))
-                            {
-                                return RedirectToAction("Index", "Home");
-                            }
-                            else
-                            {
-                                return LocalRedirect(loginVM.RedirectUrl);
-                            }
-
-                            //if (await _userManager.IsInRoleAsync(user, Utitlity.Role_Admin))
-                            //{
-                            //    return RedirectToAction("Index", "Dashboard");
-                            //}
-                            //else
-                            //{
-                                
-                            //}
-
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "Invalid login attempt");
                         }
                         
 
@@ -176,22 +79,11 @@ namespace RealState.Presentation.Controllers
 
         }
 
-        public new async Task<IActionResult> SignOut()
-        {
-            await _signInManager.SignOutAsync();
-            Response.Cookies.Delete("AuthToken");
-            return RedirectToAction(nameof(Login));
-        }
-
-        [HttpGet("emailexists")]
-        public async Task<ActionResult<bool>> CheckEmailExists(string email)
-        {
-            return await _userManager.FindByEmailAsync(email) is not null;
-        }
-
-        public IActionResult AccessDenied()
+        public IActionResult SignOut()
         {
             return View();
         }
+
+
     }
 }

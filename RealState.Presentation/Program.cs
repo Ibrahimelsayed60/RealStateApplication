@@ -11,7 +11,6 @@ using RealState.Infrastructure;
 using RealState.Infrastructure.Data;
 using RealState.Infrastructure.Identity;
 using RealState.Presentation.Extensions;
-using RealState.Presentation.Middlewares;
 
 namespace RealState.Presentation
 {
@@ -34,8 +33,6 @@ namespace RealState.Presentation
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
-
-            
 
             builder.Services.AddIdentityServicesExtension(builder.Configuration);
 
@@ -77,9 +74,7 @@ namespace RealState.Presentation
 
                 var _userManager = services.GetRequiredService<UserManager<AppUser>>();
 
-                var _roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-                await AppIdentityDbContextSeed.SeedUserAsync(_userManager, _roleManager);
+                await AppIdentityDbContextSeed.SeedUserAsync(_userManager);
             }
             catch (Exception ex)
             {
@@ -88,9 +83,6 @@ namespace RealState.Presentation
                 logger.LogError(ex, "An error has been occured during apply the migration");
             }
 
-            //app.UseMiddleware<ExceptionMiddleware>();
-
-            //app.UseStatusCodePagesWithRedirects("/errors/{0}");
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -104,7 +96,6 @@ namespace RealState.Presentation
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
