@@ -12,6 +12,9 @@ namespace RealState.Presentation.ViewModels.Identity
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Name is Required")]
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "Confirm Paasword is Required")]
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]

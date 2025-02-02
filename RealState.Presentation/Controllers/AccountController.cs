@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using RealState.Domain.Entities.Identity;
 using RealState.Domain.Services.Contract;
 using RealState.Presentation.ViewModels.Identity;
@@ -30,9 +31,15 @@ namespace RealState.Presentation.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
-            return View();
+            returnUrl ??= Url.Content("~/");
+
+            LoginViewModel loginVM = new()
+            {
+                RedirectUrl = returnUrl
+            };
+            return View(loginVM);
         }
 
         [HttpPost]
@@ -79,6 +86,13 @@ namespace RealState.Presentation.Controllers
 
         }
 
+        //[HttpPost]
+        //public IActionResult Register(RegisterViewModel registerVM)
+        //{
+
+            
+
+        //}
         public IActionResult SignOut()
         {
             return View();

@@ -74,7 +74,9 @@ namespace RealState.Presentation
 
                 var _userManager = services.GetRequiredService<UserManager<AppUser>>();
 
-                await AppIdentityDbContextSeed.SeedUserAsync(_userManager);
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                await AppIdentityDbContextSeed.SeedUserAsync(_userManager, roleManager);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,11 @@
-﻿@model RegisterViewModel
+﻿
+@model RegisterViewModel
 
+@inject RoleManager<IdentityRole> roleManager
+
+@{
+    var roles = new SelectList(roleManager.Roles as IEnumerable<IdentityRole>, nameof(IdentityRole.Name), nameof(IdentityRole.Name));
+}
 
 
 <div class="container pt-5">
@@ -14,30 +20,36 @@
         <div class="card-body p-4">
             <div class="row pt-3">
                 <div class="col-md-12">
-                    <form class="row" method="post">
+                    <form asp-controller="Account" asp-action="Register" class="row" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-floating mb-3 col-md-12">
-                            <input class="form-control" aria-required="true" />
-                            <label class="ms-2 text-muted">Email</label>
+                            <input asp-for="Email" class="form-control" aria-required="true" />
+                            <label asp-for="Email" class="ms-2 text-muted">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-floating mb-3 col-md-6">
-                            <input class="form-control" />
-                            <label class="ms-2 text-muted">Full Name</label>
+                            <input asp-for="Name" class="form-control" />
+                            <label asp-for="Name" class="ms-2 text-muted">Full Name</label>
+                            <span asp-validation-for="Name"></span>
                         </div>
                         <div class="form-floating mb-3 col-md-6">
-                            <input class="form-control" />
-                            <label class="ms-2 text-muted">Phone Number</label>
+                            <input asp-for="Phonenumber" class="form-control" />
+                            <label asp-for="Phonenumber" class="ms-2 text-muted">Phone Number</label>
+                            <span asp-validation-for="Phonenumber"></span>
                         </div>
                         <div class="form-floating mb-3 col-md-6">
-                            <input class="form-control" />
-                            <label class="ms-2 text-muted">Password</label>
+                            <input asp-for="Password" class="form-control" />
+                            <label asp-for="Password" class="ms-2 text-muted">Password</label>
+                            <span asp-validation-for="Password"></span>
                         </div>
                         <div class="form-floating mb-3 col-md-6">
-                            <input class="form-control" />
-                            <label class="ms-2 text-muted">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <label asp-for="ConfirmPassword" class="ms-2 text-muted">Confirm Password</label>
+                            <span asp-validation-for="ConfirmPassword"></span>
                         </div>
                         <div class="form-floating mb-3 col-md-6">
-                            <select class="form-select">
-                                <option disabled selected>-Select Role-</option>
+                            <select asp-for="Role" asp-items="@roles" class="form-select">
+                                <option value="@null">-Select Role-</option>
                             </select>
                         </div>
                         <div class="col-12">
@@ -49,3 +61,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
