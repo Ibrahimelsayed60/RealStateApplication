@@ -31,6 +31,24 @@ namespace RealState.Presentation.Controllers
             return View(homeVM);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Index(HomeViewModel homeVM)
+        {
+            var token = Request.Cookies["AuthToken"];
+
+            homeVM.VillaList = await _villaService.GetAllVillaWithAmenitySpecs();
+
+            foreach (var villa in homeVM.VillaList)
+            {
+                if(villa.Id %2 == 0)
+                {
+                    villa.isAvailable = false;
+                }
+            }
+
+            return View(homeVM);
+        }
+
         public IActionResult Privacy()
         {
             return View();

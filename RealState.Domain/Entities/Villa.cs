@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,9 @@ namespace RealState.Domain.Entities
         public DateTime? UpdatedDate { get;set; }
 
         public IEnumerable<Amenity>? Amenities { get; set; }
+
+        [NotMapped]
+        public bool isAvailable { get; set; } = true;
 
     }
 }
