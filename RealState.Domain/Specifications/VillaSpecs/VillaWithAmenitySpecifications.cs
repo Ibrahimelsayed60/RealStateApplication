@@ -15,6 +15,11 @@ namespace RealState.Domain.Specifications.VillaSpecs
             AddIncludes();
         }
 
+        public VillaWithAmenitySpecifications(int id):base(v => v.Id == id) 
+        {
+            AddIncludes();
+        }
+
         private void AddIncludes()
         {
             Includes.Add(v => v.Amenities);

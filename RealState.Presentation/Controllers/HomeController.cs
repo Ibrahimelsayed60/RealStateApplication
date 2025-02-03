@@ -32,23 +32,6 @@ namespace RealState.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(HomeViewModel homeVM)
-        {
-            var token = Request.Cookies["AuthToken"];
-
-            homeVM.VillaList = await _villaService.GetAllVillaWithAmenitySpecs();
-
-            foreach (var villa in homeVM.VillaList)
-            {
-                if(villa.Id %2 == 0)
-                {
-                    villa.isAvailable = false;
-                }
-            }
-
-            return View(homeVM);
-        }
-
         public async Task<IActionResult> GetVillasByDate(int nights, DateOnly CheckInDate)
         {
             var villaList = await _villaService.GetAllVillaWithAmenitySpecs();

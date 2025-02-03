@@ -36,6 +36,13 @@ namespace RealState.Application.Services
             return await _unitOfWork.Repository<Villa>().GetByIdAsync(id);
         }
 
+        public async Task<Villa?> GetVillaWithAmenityById(int id)
+        {
+            var specs = new VillaWithAmenitySpecifications(id);
+
+            return await _unitOfWork.Repository<Villa>().GetItemWithSpecAsync(specs);
+        }
+
         public int CreateVilla(Villa villa)
         {
             return _unitOfWork.Repository<Villa>().Add(villa);
