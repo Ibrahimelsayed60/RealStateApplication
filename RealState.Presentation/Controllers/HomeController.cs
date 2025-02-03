@@ -49,6 +49,27 @@ namespace RealState.Presentation.Controllers
             return View(homeVM);
         }
 
+        public async Task<IActionResult> GetVillasByDate(int nights, DateOnly CheckInDate)
+        {
+            var villaList = await _villaService.GetAllVillaWithAmenitySpecs();
+
+            foreach (var villa in villaList)
+            {
+                if (villa.Id % 2 == 0)
+                {
+                    villa.isAvailable = false;
+                }
+            }
+            HomeViewModel homeVM = new()
+            {
+                CheckInDate = CheckInDate,
+                VillaList = villaList,
+                NumberOfNights = nights
+                
+            };
+            return PartialView("_villaList", homeVM);
+        }
+
         public IActionResult Privacy()
         {
             return View();
