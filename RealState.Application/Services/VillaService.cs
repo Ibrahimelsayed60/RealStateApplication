@@ -31,7 +31,7 @@ namespace RealState.Application.Services
 
             return await _unitOfWork.Repository<Villa>().GetAllWithSpecAsync(specs);
         }
-        public async Task<Villa> GetVillaById(int id)
+        public async Task<Villa> GetVillaByIdAsync(int id)
         {
             return await _unitOfWork.Repository<Villa>().GetByIdAsync(id);
         }

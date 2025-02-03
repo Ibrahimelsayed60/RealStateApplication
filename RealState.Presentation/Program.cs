@@ -46,6 +46,8 @@ namespace RealState.Presentation
 
             builder.Services.AddScoped<IAmenityService, AmenityService>();
 
+            builder.Services.AddScoped<IBookingService, BookingService>();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 

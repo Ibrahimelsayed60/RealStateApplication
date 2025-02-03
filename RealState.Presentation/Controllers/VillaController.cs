@@ -96,7 +96,7 @@ namespace RealState.Presentation.Controllers
             if (Id is null)
                 return BadRequest();
 
-            var villa = await _villaService.GetVillaById(Id.Value);
+            var villa = await _villaService.GetVillaByIdAsync(Id.Value);
 
             if(villa is null)
             {
@@ -175,7 +175,7 @@ namespace RealState.Presentation.Controllers
 
             try
             {
-                var villa = await _villaService.GetVillaById(id);
+                var villa = await _villaService.GetVillaByIdAsync(id);
                 bool result = false;
 
                 if(villa is not null)
