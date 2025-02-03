@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealState.Application.Common;
 using RealState.Application.Services;
+using RealState.Application.Services.interfaces;
 using RealState.Domain;
 using RealState.Domain.Entities.Identity;
 using RealState.Domain.Repositories.Contract;
@@ -11,6 +12,7 @@ using RealState.Infrastructure;
 using RealState.Infrastructure.Data;
 using RealState.Infrastructure.Identity;
 using RealState.Presentation.Extensions;
+using Stripe;
 
 namespace RealState.Presentation
 {
@@ -48,6 +50,8 @@ namespace RealState.Presentation
 
             builder.Services.AddScoped<IBookingService, BookingService>();
 
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
@@ -55,6 +59,8 @@ namespace RealState.Presentation
             #endregion
 
             var app = builder.Build();
+
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
 
             using var scope = app.Services.CreateScope();
 

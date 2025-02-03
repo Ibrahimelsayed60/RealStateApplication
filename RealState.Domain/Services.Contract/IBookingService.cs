@@ -10,7 +10,13 @@ namespace RealState.Domain.Services.Contract
     public interface IBookingService
     {
 
+        Task<Booking?> GetBookingwithSpecById(int bookingId);
+
         Task<int> CreateBookingAsync(Booking booking);
+
+        Task UpdateStatus(int bookingId, string orderStatus);
+
+        Task UpdateStripePaymentId(int bookingId, string paymentSesionId, string paymentIntentId);
 
     }
 }

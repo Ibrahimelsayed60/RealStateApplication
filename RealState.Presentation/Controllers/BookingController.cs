@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RealState.Application.Services.interfaces;
 using RealState.Domain.Entities;
 using RealState.Domain.Entities.Identity;
 using RealState.Domain.Services.Contract;
 using RealState.Presentation.Helpers;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace RealState.Presentation.Controllers
@@ -14,14 +16,18 @@ namespace RealState.Presentation.Controllers
         private readonly IVillaService _villaService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBookingService _bookingService;
+        private readonly IPaymentService _paymentService;
 
         public BookingController(IVillaService villaService,
             UserManager<AppUser> userManager,
-            IBookingService bookingService)
+            IBookingService bookingService,
+            IPaymentService paymentService,
+            IConfiguration configuration)
         {
             _villaService = villaService;
             _userManager = userManager;
             _bookingService = bookingService;
+            _paymentService = paymentService;
         }
 
         [Authorize]
@@ -59,15 +65,43 @@ namespace RealState.Presentation.Controllers
 
             booking.BookingDate = DateTime.Now;
 
+
+
             var result = await _bookingService.CreateBookingAsync(booking);
 
-            return RedirectToAction(nameof(BookingConfirmation), new {bookingId = booking.Id});
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
+            var options = _paymentService.CreateStripeSessionOptions(booking, villa, domain);
+
+            var session = _paymentService.CreateSession(options);
+
+            await _bookingService.UpdateStripePaymentId(booking.Id, session.Id, session.PaymentIntentId);
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
         }
 
         [Authorize]
-        public IActionResult BookingConfirmation(int bookingId)
+        public async Task<IActionResult> BookingConfirmation(int bookingId)
         {
-            return View();
+
+            var booking = await _bookingService.GetBookingwithSpecById(bookingId);
+
+
+            if (booking is not null)
+            {
+                if (booking.Status == SD.StatusPending)
+                {
+                    var service = new SessionService();
+                    Session session = service.Get(booking.StripeSessionId);
+                    if (session.PaymentStatus == "paid")
+                    {
+                        await _bookingService.UpdateStatus(bookingId, SD.StatusApproved);
+                        await _bookingService.UpdateStripePaymentId(bookingId, session.Id, session.PaymentIntentId);
+                    }
+                } 
+            }
+
+            return View(bookingId);
         }
 
     }
