@@ -28,5 +28,7 @@ namespace RealState.Infrastructure.Data
         public DbSet<VillaNumber> VillaNumbers { get; set; }
 
         public DbSet<Amenity> Amenities { get; set; }
+
+        public DbSet<Booking> Bookings { get; set; }
     }
 }
