@@ -19,7 +19,7 @@ function loadDataTable(status) {
             { data: 'numberOfNights', "width": "10%" },
             { data: 'totalCost', render: $.fn.dataTable.render.number(',', '.', 2), "width": "10%" },
             {
-                data: 'Id',
+                data: 'id',
                 "render": function (data) {
                     return `<div class="w-75 btn-group">
                         <a href="/booking/bookingDetails?bookingId=${data}" class="btn btn-outline-warning mx-2">

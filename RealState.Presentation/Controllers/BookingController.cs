@@ -117,11 +117,13 @@ namespace RealState.Presentation.Controllers
         }
 
         [Authorize]
-        public IActionResult BookingDetails(int bookingId)
+        public async Task<IActionResult> BookingDetails(int bookingId)
         {
-            var booking = _bookingService.GetBookingwithSpecById(bookingId);
+            var booking = await _bookingService.GetBookingwithSpecById(bookingId);
 
-            return View(booking);
+            if(booking is not null) 
+                return View(booking);
+            return NotFound();
         }
 
 
