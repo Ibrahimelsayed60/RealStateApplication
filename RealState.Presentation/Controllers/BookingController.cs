@@ -116,10 +116,19 @@ namespace RealState.Presentation.Controllers
             return View(bookingId);
         }
 
+        [Authorize]
+        public IActionResult BookingDetails(int bookingId)
+        {
+            var booking = _bookingService.GetBookingwithSpecById(bookingId);
+
+            return View(booking);
+        }
+
+
         #region API Endpoint
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string status)
         {
             IEnumerable<BookingViewModel> objBookings;
 
@@ -143,6 +152,12 @@ namespace RealState.Presentation.Controllers
                 objBookings = _mapper.Map<IEnumerable<Booking>, IEnumerable<BookingViewModel>>(bookings);
 
             }
+            if (!string.IsNullOrEmpty(status))
+            {
+                objBookings = objBookings.Where(u => u.Status.ToLower().Equals(status.ToLower()));
+            }
+
+
             return Json(new { data = objBookings });
         }
 
