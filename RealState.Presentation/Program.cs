@@ -12,6 +12,7 @@ using RealState.Infrastructure;
 using RealState.Infrastructure.Data;
 using RealState.Infrastructure.Identity;
 using RealState.Presentation.Extensions;
+using RealState.Presentation.Helpers;
 using Stripe;
 
 namespace RealState.Presentation
@@ -54,6 +55,7 @@ namespace RealState.Presentation
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
             #endregion

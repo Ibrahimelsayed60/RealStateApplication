@@ -43,7 +43,7 @@ namespace RealState.Application.Services
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
                         Name = villa.Name,
-                        Images = new List<string> { "https://random-id.ngrok-free.app/files/images/VillaImage/"+villa.ImageUrl }
+                        //Images = new List<string> { "https://random-id.ngrok-free.app/files/images/VillaImage/"+villa.ImageUrl }
                     },
                 },
                 Quantity = 1,

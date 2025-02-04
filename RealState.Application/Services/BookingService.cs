@@ -25,6 +25,18 @@ namespace RealState.Application.Services
             return await _unitOfWork.CompleteAync();
         }
 
+        public async Task<IEnumerable<Booking>> GetAllBookingswithSpec()
+        {
+            var spec = new BookingForVillaSpecifications();
+            return await _unitOfWork.Repository<Booking>().GetAllWithSpecAsync(spec);
+        }
+
+        public async Task<IEnumerable<Booking>> GetBookingsByEmailWithSpec(string Email)
+        {
+            var spec = new BookingForVillaSpecifications(Email);
+            return await _unitOfWork.Repository<Booking>().GetAllWithSpecAsync(spec);
+        }
+
         public async Task<Booking?> GetBookingwithSpecById(int bookingId)
         {
             var spec = new BookingForVillaSpecifications(bookingId);

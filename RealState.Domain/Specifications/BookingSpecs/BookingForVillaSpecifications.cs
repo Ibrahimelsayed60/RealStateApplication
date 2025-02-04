@@ -9,6 +9,16 @@ namespace RealState.Domain.Specifications.BookingSpecs
 {
     public class BookingForVillaSpecifications : BaseSpecifications<Booking>
     {
+        public BookingForVillaSpecifications():base()
+        {
+            AddIncludes();
+        }
+
+        public BookingForVillaSpecifications(string email):base(b => b.UserEmail == email)
+        {
+            AddIncludes();
+        }
+
         public BookingForVillaSpecifications(int id):base( b => b.Id == id)
         {
             AddIncludes();
