@@ -27,26 +27,36 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         
+                        @if (User.IsInRole(SD.Role_Admin))
+                        {
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Content Management
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="nav-link text-dark" asp-controller="Villa" asp-action="Index">Villa</a>
-                                 </li>
-                                <li>
-                                    <a class="nav-link text-dark" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-dark" asp-controller="Amenity" asp-action="Index">Amenity</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-dark" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">Booking</a>
-                                </li>
-                            </ul>
-                        </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Content Management
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="nav-link text-dark" asp-controller="Villa" asp-action="Index">Villa</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-dark" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-dark" asp-controller="Amenity" asp-action="Index">Amenity</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-dark" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">Booking</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Booking" asp-action="Index">Manage Bookings</a>
+                            </li>
+                        }
 
                         
                     </ul>
@@ -58,6 +68,7 @@
     <div class="">
         <main role="main" class="px-5" >
             <div class="loading spinner" style="display:none;"> Loading</div>
+            <partial name="_Notification" />
             @RenderBody()
         </main>
     </div>

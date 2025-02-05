@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RealState.Application.Common;
 using RealState.Application.Services.interfaces;
 using RealState.Domain.Entities;
 using RealState.Domain.Entities.Identity;
@@ -80,6 +81,23 @@ namespace RealState.Presentation.Controllers
 
             booking.BookingDate = DateTime.Now;
 
+            var villaNumbersList = await _villaNumberService.GetAllVillaNumbers();
+
+            var bookedVillas = await _bookingService.GetAllBookingsWithStatusSpecAsync(u => u.Status == SD.StatusApproved ||
+            u.Status == SD.StatusCheckedIn);
+
+            var roomsAvailable = VillaAvailability.VillaRoomsAvailableCount(villa.Id, villaNumbersList.ToList(), booking.CheckInDate, booking.NumberOfNights, bookedVillas.ToList());
+
+            if(roomsAvailable == 0)
+            {
+                TempData["error"] = "Room has been sold out!";
+                return RedirectToAction(nameof(FinalizeBooking), new
+                {
+                    villaId = booking.VillaId,
+                    checkInDate = booking.CheckInDate,
+                    nights = booking.NumberOfNights
+                });
+            }
 
 
             var result = await _bookingService.CreateBookingAsync(booking);
