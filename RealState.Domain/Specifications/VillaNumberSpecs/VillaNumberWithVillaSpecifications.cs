@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,10 @@ namespace RealState.Domain.Specifications.VillaNumberSpecs
             AddIncludes();
         }
 
+        public VillaNumberWithVillaSpecifications(Expression<Func<VillaNumber, bool>> criteria): base(criteria)
+        {
+            AddIncludes();
+        }
 
         public VillaNumberWithVillaSpecifications(VillaSpecParams spec)
             :base(v => (!spec.VillaNumber.HasValue ||  v.Villa_Number == spec.VillaNumber))

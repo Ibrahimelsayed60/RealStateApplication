@@ -21,7 +21,7 @@ namespace RealState.Domain.Services.Contract
 
         Task<int> CreateBookingAsync(Booking booking);
 
-        Task UpdateStatus(int bookingId, string orderStatus);
+        Task UpdateStatus(int bookingId, string orderStatus, int villaNumber);
 
         Task UpdateStripePaymentId(int bookingId, string paymentSesionId, string paymentIntentId);
 

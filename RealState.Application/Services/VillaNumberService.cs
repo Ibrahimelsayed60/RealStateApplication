@@ -6,6 +6,7 @@ using RealState.Domain.Specifications.VillaNumberSpecs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,19 @@ namespace RealState.Application.Services
             VillaNumberWithVillaSpecifications villaSpecs = new VillaNumberWithVillaSpecifications();
 
             return await _unitOfWork.Repository<VillaNumber>().GetAllWithSpecAsync(villaSpecs);
+        }
+
+        public async Task<IEnumerable<VillaNumber>> GetAllVillaNumbersWithSpecificCriteria(Expression<Func<VillaNumber, bool>> criteria)
+        {
+            VillaNumberWithVillaSpecifications villaSpecs = new VillaNumberWithVillaSpecifications(criteria);
+
+            return await _unitOfWork.Repository<VillaNumber>().GetAllWithSpecAsync(villaSpecs);
+        }
+
+        public async Task<IEnumerable<VillaNumber>> GetAllVillaNumbersInSpecificVilla(int villaId)
+        {
+            var specs = new VillaNumbersByVillaIdSpecifications(villaId);
+            return await _unitOfWork.Repository<VillaNumber>().GetAllWithSpecAsync(specs);
         }
 
         public async Task<VillaNumber?> GetVillaNumberWithSpecById(int id)
@@ -65,5 +79,7 @@ namespace RealState.Application.Services
             var data = await GetVillaNumberByVilla_number(villa_number);
             return data != null;
         }
+
+        
     }
 }

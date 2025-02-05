@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,5 +43,8 @@ namespace RealState.Domain.Entities
         public DateTime ActualCheckOutDate { get; set; }
 
         public int VillaNumber { get; set; }
+
+        [NotMapped]
+        public List<VillaNumber> VillaNumbers { get; set; }
     }
 }

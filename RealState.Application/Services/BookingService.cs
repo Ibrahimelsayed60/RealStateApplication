@@ -51,7 +51,7 @@ namespace RealState.Application.Services
             return await _unitOfWork.Repository<Booking>().GetItemWithSpecAsync(spec);
         }
 
-        public async Task UpdateStatus(int bookingId, string orderStatus)
+        public async Task UpdateStatus(int bookingId, string orderStatus, int villaNumber = 0)
         {
             var booking = await _unitOfWork.Repository<Booking>().GetByIdAsync(bookingId);
 
@@ -61,6 +61,7 @@ namespace RealState.Application.Services
 
                 if(booking.Status == StaticData.StatusCheckedIn)
                 {
+                    booking.VillaNumber = villaNumber;
                     booking.ActualCheckInDate = DateTime.Now;
                 }
                 if(booking.Status == StaticData.StatusCompleted)

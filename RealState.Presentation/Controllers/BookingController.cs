@@ -19,12 +19,14 @@ namespace RealState.Presentation.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IBookingService _bookingService;
         private readonly IPaymentService _paymentService;
+        private readonly IVillaNumberService _villaNumberService;
         private readonly IMapper _mapper;
 
         public BookingController(IVillaService villaService,
             UserManager<AppUser> userManager,
             IBookingService bookingService,
             IPaymentService paymentService,
+            IVillaNumberService villaNumberService,
             IMapper mapper,
             IConfiguration configuration)
         {
@@ -32,6 +34,7 @@ namespace RealState.Presentation.Controllers
             _userManager = userManager;
             _bookingService = bookingService;
             _paymentService = paymentService;
+            _villaNumberService = villaNumberService;
             _mapper = mapper;
         }
 
@@ -107,7 +110,7 @@ namespace RealState.Presentation.Controllers
                     Session session = service.Get(booking.StripeSessionId);
                     if (session.PaymentStatus == "paid")
                     {
-                        await _bookingService.UpdateStatus(bookingId, SD.StatusApproved);
+                        await _bookingService.UpdateStatus(bookingId, SD.StatusApproved,0);
                         await _bookingService.UpdateStripePaymentId(bookingId, session.Id, session.PaymentIntentId);
                     }
                 } 
@@ -121,11 +124,65 @@ namespace RealState.Presentation.Controllers
         {
             var booking = await _bookingService.GetBookingwithSpecById(bookingId);
 
-            if(booking is not null) 
+            if(booking is not null)
+            {
+                if (booking.VillaNumber == 0 && booking.Status == SD.StatusApproved)
+                {
+                    var availableVillaNumber = AssignAvailableVillaNumberByVilla(booking.VillaId);
+                    booking.VillaNumbers = (await _villaNumberService.GetAllVillaNumbersWithSpecificCriteria( u => u.VillaId == booking.VillaId
+                    &&  availableVillaNumber.Result.Any(x => x == u.Villa_Number))).ToList();
+                }
+
+
                 return View(booking);
+            }
             return NotFound();
         }
 
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> CheckIn(Booking booking)
+        {
+            await _bookingService.UpdateStatus(booking.Id, SD.StatusCheckedIn, booking.VillaNumber);
+
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> CheckOut(Booking booking)
+        {
+            await _bookingService.UpdateStatus(booking.Id, SD.StatusCompleted, booking.VillaNumber);
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+        }
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> CancelBooking(Booking booking)
+        {
+            await _bookingService.UpdateStatus(booking.Id, SD.StatusCancelled, 0);
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+        }
+
+        private async Task<List<int>> AssignAvailableVillaNumberByVilla(int villaId)
+        {
+            List<int> availableVillaNumbers = new();
+
+            var villaNumbers = await _villaNumberService.GetAllVillaNumbersInSpecificVilla(villaId);
+
+            var checkedInVilla = (await _bookingService.GetAllBookingsWithStatusSpecAsync(b => b.VillaId == villaId && b.Status == SD.StatusCheckedIn)).Select(v =>v.VillaNumber);
+
+            foreach (var villaNumber in villaNumbers)
+            {
+                if (!checkedInVilla.Contains(villaNumber.Villa_Number))
+                {
+                    availableVillaNumbers.Add(villaNumber.Villa_Number);
+                }
+            }
+            return availableVillaNumbers;
+
+        }
 
         #region API Endpoint
         [HttpGet]

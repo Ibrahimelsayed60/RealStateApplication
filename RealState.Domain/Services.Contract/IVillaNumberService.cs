@@ -3,6 +3,7 @@ using RealState.Domain.Specifications.VillaNumberSpecs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,11 @@ namespace RealState.Domain.Services.Contract
 
         Task<IEnumerable<VillaNumber>> GetAllVillaNumbersWithVillaData();
 
+        Task<IEnumerable<VillaNumber>> GetAllVillaNumbersWithSpecificCriteria(Expression<Func<VillaNumber, bool>> criteria);
+    
         Task<VillaNumber?> GetVillaNumberByVilla_number(int villa_number);
+
+        Task<IEnumerable<VillaNumber>> GetAllVillaNumbersInSpecificVilla(int villaId);
 
         Task<VillaNumber?> GetVillaNumberWithSpecById(int id);
 
