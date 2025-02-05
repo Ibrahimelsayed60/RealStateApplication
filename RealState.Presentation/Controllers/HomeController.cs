@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using RealState.Application.Common;
 using RealState.Domain;
 using RealState.Domain.Services.Contract;
+using RealState.Presentation.Helpers;
 using RealState.Presentation.Models;
 using RealState.Presentation.ViewModels;
 using System;
@@ -11,10 +13,17 @@ namespace RealState.Presentation.Controllers
     public class HomeController : Controller
     {
         private readonly IVillaService _villaService;
+        private readonly IVillaNumberService _villaNumberService;
+        private readonly IBookingService _bookingService;
 
-        public HomeController(IVillaService villaService)
+        public HomeController(
+            IVillaService villaService,
+            IVillaNumberService villaNumberService,
+            IBookingService bookingService)
         {
             _villaService = villaService;
+            _villaNumberService = villaNumberService;
+            _bookingService = bookingService;
         }
 
         public async Task<IActionResult> Index()
@@ -36,12 +45,16 @@ namespace RealState.Presentation.Controllers
         {
             var villaList = await _villaService.GetAllVillaWithAmenitySpecs();
 
+            var villaNumbersList = await _villaNumberService.GetAllVillaNumbers();
+
+            var bookedVillas = await _bookingService.GetAllBookingsWithStatusSpecAsync(u => u.Status == SD.StatusApproved ||
+            u.Status == SD.StatusCheckedIn);
+
             foreach (var villa in villaList)
             {
-                if (villa.Id % 2 == 0)
-                {
-                    villa.isAvailable = false;
-                }
+                var roomsAvailable = VillaAvailability.VillaRoomsAvailableCount(villa.Id, villaNumbersList.ToList(), CheckInDate, nights, bookedVillas.ToList());
+
+                villa.isAvailable = roomsAvailable > 0? true : false;
             }
             HomeViewModel homeVM = new()
             {

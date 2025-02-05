@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace RealState.Domain.Services.Contract
     {
 
         Task<IEnumerable<Booking>> GetAllBookingswithSpec();
+
+        Task<IEnumerable<Booking>> GetAllBookingsWithStatusSpecAsync(Expression<Func<Booking, bool>> criteriaExpression);
 
         Task<IEnumerable<Booking>> GetBookingsByEmailWithSpec(string Email);
 

@@ -6,6 +6,7 @@ using RealState.Domain.Specifications.BookingSpecs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,13 @@ namespace RealState.Application.Services
         {
             var spec = new BookingForVillaSpecifications();
             return await _unitOfWork.Repository<Booking>().GetAllWithSpecAsync(spec);
+        }
+
+        public async Task<IEnumerable<Booking>> GetAllBookingsWithStatusSpecAsync(Expression<Func<Booking, bool>> criteriaExpression)
+        {
+            var specs = new BookingForVillaSpecifications(criteriaExpression);
+
+            return await _unitOfWork.Repository<Booking>().GetAllWithSpecAsync(specs);
         }
 
         public async Task<IEnumerable<Booking>> GetBookingsByEmailWithSpec(string Email)

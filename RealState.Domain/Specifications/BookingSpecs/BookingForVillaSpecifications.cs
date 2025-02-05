@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,11 @@ namespace RealState.Domain.Specifications.BookingSpecs
         }
 
         public BookingForVillaSpecifications(string email):base(b => b.UserEmail == email)
+        {
+            AddIncludes();
+        }
+
+        public BookingForVillaSpecifications(Expression<Func<Booking, bool>> criteriaExpression):base(criteriaExpression)
         {
             AddIncludes();
         }
